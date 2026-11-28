@@ -100,7 +100,7 @@ cc_args_list(
             "//toolchain/args/windows/msvc:deterministic_coff_object_flags",
             "//toolchain/args/windows/msvc:deterministic_codeview_flags",
         ],
-        "//conditions:default": [],
+        "//conditions:default": ["//toolchain/args/windows/mingw:deterministic_coff_object_flags"],
     }),
 )
 

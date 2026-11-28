@@ -1,0 +1,30 @@
+load("@bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+cc_library(
+    name = "mingw_coff",
+    srcs = ["mingw_coff.c"],
+    tags = ["manual"],
+    target_compatible_with = ["@platforms//os:windows"],
+)
+
+filegroup(
+    name = "mingw_coff_objects",
+    srcs = [":mingw_coff"],
+    output_group = "compilation_outputs",
+    tags = ["manual"],
+)
+
+platform_transition_filegroup(
+    name = "mingw_coff_windows_x86_64",
+    srcs = [":mingw_coff_objects"],
+    target_platform = "@llvm//platforms:windows_x86_64",
+)
+
+sh_test(
+    name = "no_timestamp_test",
+    srcs = ["verify_no_timestamp.sh"],
+    args = ["$(rootpaths :mingw_coff_windows_x86_64)"],
+    data = [":mingw_coff_windows_x86_64"],
+)

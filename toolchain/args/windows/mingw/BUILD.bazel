@@ -63,6 +63,14 @@ cc_args(
     },
 )
 
+# Without this, clang stamps the build time into the COFF header of every
+# object. It is the GNU-driver spelling of clang-cl's /Brepro.
+cc_args(
+    name = "deterministic_coff_object_flags",
+    actions = ["@rules_cc//cc/toolchains/actions:source_compile_actions"],
+    args = ["-mno-incremental-linker-compatible"],
+)
+
 cc_args(
     name = "deterministic_link_flags",
     actions = ["@rules_cc//cc/toolchains/actions:link_actions"],
