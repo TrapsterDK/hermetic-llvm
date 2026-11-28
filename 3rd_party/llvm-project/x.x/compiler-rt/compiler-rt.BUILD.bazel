@@ -1535,6 +1535,7 @@ cc_internal_symbolizer_object(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     target_triple = LLVM_TARGET_TRIPLE,
+    visibility = ["@llvm//tests/internal_symbolizer_linkmode:__pkg__"],
 )
 
 cc_library(

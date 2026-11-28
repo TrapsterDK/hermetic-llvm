@@ -1,0 +1,15 @@
+load(":internal_symbolizer_linkmode_test.bzl", "internal_symbolizer_linkmode_test", "linkmode_roots")
+
+linkmode_roots(
+    name = "roots",
+    dynamic = "@llvm-project//compiler-rt:sanitizer_common_symbolizer_internal_object",
+    static = "@llvm-project//compiler-rt:sanitizer_common_symbolizer_internal_object",
+    tags = ["manual"],
+    target_compatible_with = ["@platforms//os:linux"],
+)
+
+internal_symbolizer_linkmode_test(
+    name = "internal_symbolizer_linkmode_test",
+    target_compatible_with = ["@platforms//os:linux"],
+    target_under_test = ":roots",
+)

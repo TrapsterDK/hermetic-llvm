@@ -36,6 +36,17 @@ _internal_symbolizer_libcxx_transition = transition(
     ],
 )
 
+# The symbolizer builds the same under either runtime linkmode, so pin one value
+# and let the static and shared sanitizer runtimes share a single build of it.
+def _internal_symbolizer_linkmode_transition_impl(_settings, _attr):
+    return {"//runtimes:linkmode": "static"}
+
+_internal_symbolizer_linkmode_transition = transition(
+    implementation = _internal_symbolizer_linkmode_transition_impl,
+    inputs = [],
+    outputs = ["//runtimes:linkmode"],
+)
+
 def _link_files(targets):
     archives = {}
     objects = {}
@@ -154,6 +165,7 @@ cc_internal_symbolizer_object = rule(
         "symbolizer": attr.label(mandatory = True, providers = [CcInfo]),
         "target_triple": attr.string_list(mandatory = True),
     },
+    cfg = _internal_symbolizer_linkmode_transition,
     fragments = ["cpp"],
     toolchains = use_cc_toolchain(),
 )
